@@ -1,45 +1,46 @@
-package service;
+package com.moneytransfer.app.service;
 
-import model.SendUser;
-import model.User;
+import com.moneytransfer.app.model.SendUser;
+import com.moneytransfer.app.model.User;
 
 import java.util.Collection;
 import java.util.HashMap;
 
-public class UserServiceImpl implements UserService {
+public class UserService {
     private HashMap<String, User> userMap;
+    private static UserService userServiceInstance = null;
+    private TransferService transferService = TransferService.getInstance();
 
-    public UserServiceImpl() {
+    private UserService() {
         userMap = new HashMap<>();
     }
 
-    @Override
+    public static UserService getInstance() {
+        if (userServiceInstance == null)
+            userServiceInstance = new UserService();
+        return userServiceInstance;
+    }
+
     public void addUser(User user) {
         userMap.put(user.getUserName(), user);
     }
 
-    @Override
     public Collection<User> getUsers() {
         return userMap.values();
     }
 
-    @Override
     public User getUserInfo(String userName) {
         return userMap.get(userName);
     }
 
-    @Override
     public boolean sendMoney(SendUser sendAmount) {
-        BankInfoService bankInfoService = new BankInfoServiceImpl();
         User sender = userMap.get(sendAmount.getSender());
         User receiver = userMap.get(sendAmount.getReceiver());
         int amount = sendAmount.getSendAmount();
-        boolean usersExists = userExists(sender, receiver);
-        if(usersExists) {
-            boolean canSend = bankInfoService.canSendMoney(sender, receiver, amount);
-            if(canSend) return true;
+        if(!userExists(sender, receiver)) {
+            return false;
         }
-        return false;
+        return transferService.sendMoney(sender, receiver, amount);
     }
 
     /*
@@ -50,7 +51,6 @@ public class UserServiceImpl implements UserService {
         boolean senderExist = userMap.containsKey(sender.getUserName());
         boolean receiverExist = userMap.containsKey(receiver.getUserName());
         System.out.println(senderExist + " " + receiverExist);
-        if(senderExist && receiverExist) return true;
-        return false;
+        return senderExist && receiverExist;
     }
 }

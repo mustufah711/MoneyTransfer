@@ -1,4 +1,4 @@
-package model;
+package com.moneytransfer.app.model;
 
 public class SendUser {
     private String sender;
@@ -27,5 +27,10 @@ public class SendUser {
 
     public void setSendAmount(int sendAmount) {
         this.sendAmount = sendAmount;
+    }
+
+    @Override
+    public String toString() {
+        return this.sender + ", " + this.receiver + ", " + this.sendAmount;
     }
 }

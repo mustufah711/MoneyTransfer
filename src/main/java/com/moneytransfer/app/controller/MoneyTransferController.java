@@ -1,19 +1,19 @@
-package controller;
+package com.moneytransfer.app.controller;
 
 import com.google.gson.Gson;
-import model.SendUser;
-import model.User;
-import response.StandardResponse;
-import service.UserService;
-import service.UserServiceImpl;
+import com.moneytransfer.app.model.SendUser;
+import com.moneytransfer.app.model.User;
+import com.moneytransfer.app.response.StandardResponse;
+import com.moneytransfer.app.service.UserService;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
 
-public class Main {
-    public static void main(String [] args) {
-        final UserService userService = new UserServiceImpl();
+public class MoneyTransferController {
+    private MoneyTransferController() {}
 
+    public static void init(){
+        final UserService userService = UserService.getInstance();
         get("/users", (req, res) -> {
             res.type("application/json");
             System.out.println("Everything working");
@@ -21,10 +21,10 @@ public class Main {
         });
 
         post("/users", (req, res) -> {
-           res.type("application/json");
-           User user = new Gson().fromJson(req.body(), User.class);
-           userService.addUser(user);
-           return new Gson().toJson(new StandardResponse("User Added"));
+            res.type("application/json");
+            User user = new Gson().fromJson(req.body(), User.class);
+            userService.addUser(user);
+            return new Gson().toJson(new StandardResponse("User Added"));
         });
 
         get("/user/:userName", (req, res) -> {

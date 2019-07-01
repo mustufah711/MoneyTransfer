@@ -1,4 +1,4 @@
-package model;
+package com.moneytransfer.app.model;
 
 public class User {
     private String userName;

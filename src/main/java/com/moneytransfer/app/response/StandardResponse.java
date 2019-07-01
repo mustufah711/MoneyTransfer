@@ -1,4 +1,4 @@
-package response;
+package com.moneytransfer.app.response;
 
 import com.google.gson.JsonElement;
 
