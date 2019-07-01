@@ -24,7 +24,7 @@ public class Main {
            res.type("application/json");
            User user = new Gson().fromJson(req.body(), User.class);
            userService.addUser(user);
-           return new Gson().toJson(new StandardResponse("Success"));
+           return new Gson().toJson(new StandardResponse("User Added"));
         });
 
         get("/user/:userName", (req, res) -> {
@@ -39,7 +39,7 @@ public class Main {
             if(transfer)
                 return new Gson().toJson(new StandardResponse("Success"));
             else
-                return new Gson().toJson(new StandardResponse("Failed"));
+                return new Gson().toJson(new StandardResponse("Failed transfer, low balances"));
         });
     }
 }

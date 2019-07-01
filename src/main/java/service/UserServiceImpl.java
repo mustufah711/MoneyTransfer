@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class UserServiceImpl implements UserService {
-    protected HashMap<String, User> userMap;
+    private HashMap<String, User> userMap;
 
     public UserServiceImpl() {
         userMap = new HashMap<>();
@@ -33,11 +33,24 @@ public class UserServiceImpl implements UserService {
         BankInfoService bankInfoService = new BankInfoServiceImpl();
         User sender = userMap.get(sendAmount.getSender());
         User receiver = userMap.get(sendAmount.getReceiver());
-        boolean userExists = bankInfoService.userExists(sender, receiver);
         int amount = sendAmount.getSendAmount();
-        receiver.setBankAmount(receiver.getBankAmount() + amount);
-        sender.setBankAmount(sender.getBankAmount() - amount);
-        return true;
+        boolean usersExists = userExists(sender, receiver);
+        if(usersExists) {
+            boolean canSend = bankInfoService.canSendMoney(sender, receiver, amount);
+            if(canSend) return true;
+        }
+        return false;
+    }
 
+    /*
+        Verify if both sender and receiver exists
+     */
+    private boolean userExists(User sender, User receiver) {
+        if(sender.getUserName().equals(receiver.getUserName())) return false;
+        boolean senderExist = userMap.containsKey(sender.getUserName());
+        boolean receiverExist = userMap.containsKey(receiver.getUserName());
+        System.out.println(senderExist + " " + receiverExist);
+        if(senderExist && receiverExist) return true;
+        return false;
     }
 }
