@@ -16,9 +16,7 @@ public class TransferService {
             transferServiceInstance = new TransferService();
         return transferServiceInstance;
     }
-    /*
-        Check if user has enough balance to send money
-     */
+
     public boolean sendMoney(User sender, User receiver, int sendAmount) {
         if(sendAmount > sender.getBankAmount()) {
             LOGGER.info("The amount " + sendAmount + " is too high");
