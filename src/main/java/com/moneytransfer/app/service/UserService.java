@@ -25,8 +25,12 @@ public class UserService {
         userMap.put(user.getUserName(), user);
     }
 
-    public void deleteUser(String userName) {
-        userMap.remove(userName);
+    public boolean deleteUser(String userName) {
+        if(userMap.containsKey(userName)) {
+            userMap.remove(userName);
+            return true;
+        }
+        return false;
     }
 
     public Collection<User> getUsers() {

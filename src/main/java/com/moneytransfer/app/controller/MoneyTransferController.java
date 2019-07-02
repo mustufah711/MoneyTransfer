@@ -32,8 +32,11 @@ public class MoneyTransferController {
 
         delete("/user/:userName", (req, res) -> {
             res.type("application/json");
-            userService.deleteUser(req.params(":userName"));
-            return new Gson().toJson(new StandardResponse("User Deleted"));
+            boolean deleteUser = userService.deleteUser(req.params(":userName"));
+            if(deleteUser) {
+                return new Gson().toJson(new StandardResponse("User Deleted"));
+            }
+            return new Gson().toJson(new StandardResponse("User Doesn't Exist"));
         });
 
         post("/sendMoney", (req, res) -> {

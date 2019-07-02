@@ -1,22 +1,20 @@
 import com.google.gson.Gson;
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.response.Response;
+import com.jayway.restassured.specification.RequestSpecification;
+import com.moneytransfer.app.model.SendUser;
 import com.moneytransfer.app.model.User;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import java.util.HashMap;
 
 import static com.jayway.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MoneyTransferControllerTest {
 
-    public static HashMap<String, User> mockUserMap;
-
-    @BeforeClass
+    @BeforeAll
     public static void setup() {
-        mockUserMap = new HashMap<>();
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = 4567;
     }
@@ -33,8 +31,62 @@ public class MoneyTransferControllerTest {
     }
 
     @Test
-    public void getAllUserTest() {
-        given().when().get("/users").then()
-                .body(containsString("john_smith12"));
+    public void getUserJohnSmith() {
+        given().when().get("/user/john_smith12").then()
+                .statusCode(200);
     }
+
+    @Test
+    public void addSecondUserTest() {
+        String addUserJson = "{\"userName\":\"frank_adams45\",\"name\":\"Frank Adams\",\"age\":\"35\",\"bankAmount\":\"25000\"}";
+        Gson gson = new Gson();
+        User json = gson.fromJson(addUserJson, User.class);
+        given().contentType("application/json")
+                .body(json)
+                .when().post("/users").then()
+                .statusCode(200);
+    }
+
+    @Test
+    public void getUserFrankAdams() {
+        given().when().get("/user/frank_adams45").then()
+                .statusCode(200);
+    }
+
+    @Test
+    public void getAllUsersTest() {
+        given().when().get("/users").then()
+                .statusCode(200);
+    }
+
+    /*
+        Send over balanced amount
+     */
+    @Test
+    public void sendMoneyToFrankAdamsTest() {
+        String sendMoneyJson = "{\"sender\":\"john_smith12\",\"receiver\":\"frank_adams45\",\"sendAmount\":\"6000\"}";
+        Gson gson = new Gson();
+        SendUser json = gson.fromJson(sendMoneyJson, SendUser.class);
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.body(json);
+        Response response = httpRequest.post("/sendMoney");
+        String expectedResponse = "{\"responseStatus\":\"Failed transfer, low balances\"}";
+        assertEquals(expectedResponse, response.asString());
+    }
+
+    /*
+        Send correct balanced amount
+     */
+    @Test
+    public void sendMoneyToFrankAdamsTest2() {
+        String sendMoneyJson = "{\"sender\":\"john_smith12\",\"receiver\":\"frank_adams45\",\"sendAmount\":\"1000\"}";
+        Gson gson = new Gson();
+        SendUser json = gson.fromJson(sendMoneyJson, SendUser.class);
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.body(json);
+        Response response = httpRequest.post("/sendMoney");
+        String expectedResponse = "{\"responseStatus\":\"Success\"}";
+        assertEquals(expectedResponse, response.asString());
+    }
+
 }
