@@ -3,13 +3,13 @@ Simple API to send money between two users
 
 The API is exposed on port 4567. 
 
-API Endpoints:
+## API Endpoints:
  
-/users - GET
--Retrieve all users
+### /users - GET 
+Retrieve all users
   
-/users - POST
--Create new user
+#### /users - POST 
+Create new user
 schema: 
   {
     "userName": "John_Smith12", 
@@ -18,11 +18,11 @@ schema:
     "bankAmount": "1000"
 }
   
-/user/:userName - GET
--Retrieve single user
+### /user/:userName - GET
+Retrieve single user
   
-/sendMoney - POST
--Send money between two users
+### /sendMoney - POST
+Send money between two users
 schema:
   {
     "sender": "John_Smith12",
