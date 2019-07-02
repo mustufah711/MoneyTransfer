@@ -5,11 +5,13 @@ import com.moneytransfer.app.model.User;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 public class UserService {
     private HashMap<String, User> userMap;
     private static UserService userServiceInstance = null;
     private TransferService transferService = TransferService.getInstance();
+    private static final Logger LOGGER = Logger.getLogger(UserService.class.getName());
 
     private UserService() {
         userMap = new HashMap<>();
@@ -23,13 +25,16 @@ public class UserService {
 
     public void addUser(User user) {
         userMap.put(user.getUserName(), user);
+        LOGGER.info("User: " + user.getName() + " was added");
     }
 
     public boolean deleteUser(String userName) {
         if(userMap.containsKey(userName)) {
             userMap.remove(userName);
+            LOGGER.info("UserName: " + userName + " was deleted");
             return true;
         }
+        LOGGER.info("UserName: " + userName + " was not deleted");
         return false;
     }
 
