@@ -69,7 +69,7 @@ public class MoneyTransferControllerTest {
         SendUser json = gson.fromJson(sendMoneyJson, SendUser.class);
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.body(json);
-        Response response = httpRequest.post("/sendMoney");
+        Response response = httpRequest.post("/send-money");
         String expectedResponse = "{\"responseStatus\":\"Failed transfer, low balances\"}";
         assertEquals(expectedResponse, response.asString());
     }
@@ -84,7 +84,7 @@ public class MoneyTransferControllerTest {
         SendUser json = gson.fromJson(sendMoneyJson, SendUser.class);
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.body(json);
-        Response response = httpRequest.post("/sendMoney");
+        Response response = httpRequest.post("/send-money");
         String expectedResponse = "{\"responseStatus\":\"Success\"}";
         assertEquals(expectedResponse, response.asString());
     }
