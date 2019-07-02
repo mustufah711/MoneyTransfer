@@ -1,5 +1,5 @@
 # Money Transfer
-Simple API to send money between two users
+API to send money between two users
 
 The API is exposed on port 4567. 
 
