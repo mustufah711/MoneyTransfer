@@ -20,7 +20,7 @@ Retrieve single user
 - schema: { "sender": "John_Smith12", "receiver": "Tim_Sanchez_34", "sendAmount": "200" } 
 
 ### /user/:userName - DELETE
-DELETE single user
+Delete single user
 
 
   
