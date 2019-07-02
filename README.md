@@ -15,7 +15,7 @@ Retrieve all users
 ### /user/:userName - GET
 Retrieve single user
   
-### /sendMoney - POST
+### /send-money - POST
 - Send money between two users
 - schema: { "sender": "John_Smith12", "receiver": "Tim_Sanchez_34", "sendAmount": "200" } 
 
