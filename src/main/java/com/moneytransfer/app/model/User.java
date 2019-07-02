@@ -47,6 +47,6 @@ public class User {
 
     @Override
     public String toString() {
-        return this.name + " " + this.age;
+        return this.userName + " " + this.name + " " + this.age + " " + this.bankAmount;
     }
 }

@@ -6,8 +6,7 @@ import com.moneytransfer.app.model.User;
 import com.moneytransfer.app.response.StandardResponse;
 import com.moneytransfer.app.service.UserService;
 
-import static spark.Spark.get;
-import static spark.Spark.post;
+import static spark.Spark.*;
 
 public class MoneyTransferController {
     private MoneyTransferController() {}
@@ -16,7 +15,6 @@ public class MoneyTransferController {
         final UserService userService = UserService.getInstance();
         get("/users", (req, res) -> {
             res.type("application/json");
-            System.out.println("Everything working");
             return new Gson().toJson(new StandardResponse("Success", new Gson().toJsonTree(userService.getUsers())));
         });
 
@@ -30,6 +28,12 @@ public class MoneyTransferController {
         get("/user/:userName", (req, res) -> {
             res.type("application/json");
             return new Gson().toJson(new StandardResponse("Success", new Gson().toJsonTree(userService.getUserInfo(req.params(":userName")))));
+        });
+
+        delete("/user/:userName", (req, res) -> {
+            res.type("application/json");
+            userService.deleteUser(req.params(":userName"));
+            return new Gson().toJson(new StandardResponse("User Deleted"));
         });
 
         post("/sendMoney", (req, res) -> {

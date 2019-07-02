@@ -25,6 +25,10 @@ public class UserService {
         userMap.put(user.getUserName(), user);
     }
 
+    public void deleteUser(String userName) {
+        userMap.remove(userName);
+    }
+
     public Collection<User> getUsers() {
         return userMap.values();
     }
